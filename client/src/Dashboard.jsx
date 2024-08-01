@@ -63,7 +63,7 @@ const Dashboard = () => {
 
   return (
     <div>
-        <Sidebar />
+        <Sidebar from="dashboard"/>
         <div className="flex flex-col h-screen items-center justify-center ml-24">
             <div className="mr-2 mb-24 scale-150">
                 <CountdownCircleTimer

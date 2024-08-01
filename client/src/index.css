@@ -29,6 +29,12 @@ body {
   background-blend-mode: lighten;
 }
 
+.gradient-text {
+  background: linear-gradient(to right, #00C6FF, #FF5F6D, #FFC371, #FF5F6D, #00C6FF, #FF5F6D, #FFC371);
+  background-size: 300% 300%;
+  background-clip: text;
+}
+
 @layer utilities {
 
   .card-login {

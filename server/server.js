@@ -173,7 +173,7 @@ app.post("/api/updatetime", verify, async (req, res) => {
 
   try {
     const user = await db.query(
-      "UPDATE users SET study_time=$2 WHERE email=$1 RETURNING *",
+      "UPDATE users SET study_time= study_time + $2 WHERE email=$1 RETURNING *",
       [email, studytime]
     );
     if (user.rows.length > 0) {
@@ -183,6 +183,19 @@ app.post("/api/updatetime", verify, async (req, res) => {
     }
   } catch (err) {
     console.error(err);
+    res.json({ error: err });
+  }
+});
+
+app.post("/api/getstudytime", verify, async (req, res) => {
+  const { email } = req.body;
+  try {
+    let user = await db.query("SELECT study_time FROM users WHERE email=$1", [
+      email,
+    ]);
+
+    res.json({ studyTime: (user.rows[0].study_time / (60 * 60)).toFixed(2) });
+  } catch (err) {
     res.json({ error: err });
   }
 });

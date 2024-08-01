@@ -5,6 +5,8 @@ import Signup from './Signup';
 import { AuthProvider } from './components/utils/AuthContext';
 import Dashboard from './Dashboard';
 import PrivateRoutes from './components/utils/PrivateRoutes';
+import Statistics from './Statistics';
+import Pomodoro from './Pomodoro';
 
 function App() {
 
@@ -18,6 +20,8 @@ function App() {
             <Route path="/signup" element={<Signup />}></Route>
             <Route element={<PrivateRoutes />}>
               <Route path="/dashboard" element={ <Dashboard /> }></Route>
+              <Route path="/statistics" element={<Statistics />}></Route>
+              <Route path="/pomodoro" element={<Pomodoro />}></Route>
             </Route>
           </Routes>
         </AuthProvider>

@@ -106,10 +106,39 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    async function getStudyTime() {
+        try {
+            const response = await axiosJWT.post("http://localhost:5001/api/getstudytime",
+                {email: user.email},
+                {
+                    headers: {
+                        authorization: "Bearer " + user.accessToken,
+                    },
+                    withCredentials: true,
+                }
+            );
+    
+            if (response.data.error) {
+                alert("There was an issue fetching your study time.")
+                navigate(-1);
+                return;
+            } else {
+                const studyTime = (response.data.studyTime)
+                return studyTime;
+            }
+        } catch (err) {
+            console.error(err);
+            alert("There was an issue fetching your statistics")
+            navigate("/dashboard");
+        }
+
+    }
+
     let contextData = {
         user,
         loginUser,
         saveTime,
+        getStudyTime,
         error,
     };
 
