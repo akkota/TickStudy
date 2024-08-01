@@ -1,0 +1,6 @@
+CREATE TABLE users (
+	id SERIAL PRIMARY KEY,
+	email VARCHAR(219) NOT NULL,
+	password VARCHAR(219) NOT NULL,
+	refresh_token TEXT
+)

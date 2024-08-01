@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+html {
+  height: 100%;
+  width: 100%;
+}
+
+textarea:focus, input:focus{
+  outline: none;
+}
+
+
+body {
+  color: white;
+  width: 100dvw;
+  overflow-x: hidden;
+  height: 100%;
+  background-color: rgb(30 41 59);
+  background-image: url("./assets/batthern.png");
+  background-blend-mode: lighten;
+}
+
+@layer utilities {
+
+  .card-login {
+    @apply bg-blue-950 shadow-black shadow-md rounded-lg p-5 w-80 h-110
+  }
+
+  .sidebar-icon {
+    @apply relative flex items-center justify-center h-14 w-14 p-3 mt-2 mb-2 mx-auto bg-slate-800 text-blue-500 hover:bg-blue-800 rounded-2xl hover:rounded-lg transition-all duration-200 ease-linear cursor-pointer;
+  }
+
+  .sidebar-tooltip {
+    @apply absolute w-auto p-2 m-2 min-w-max left-16 top-1/2 transform -translate-y-1/2 rounded-md shadow-md text-white bg-slate-700 text-xs font-bold transition-all duration-100 scale-0 origin-left;
+  }
+
+  .sidebar-active {
+    @apply relative flex items-center justify-center h-14 w-14 p-3 mt-2 mb-2 mx-auto bg-blue-800 text-blue-500 rounded-lg cursor-pointer 
+  }
+
+}
