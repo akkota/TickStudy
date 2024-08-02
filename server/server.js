@@ -45,7 +45,7 @@ const generateRefreshToken = (user) => {
 };
 
 app.post("/api/refresh", async (req, res) => {
-  const refreshToken = req.body.refreshToken;
+  const refreshToken = req.body.token;
   if (!refreshToken) {
     return res.status(401).json({
       error: "You are not authenticated, you cannot access this route.",

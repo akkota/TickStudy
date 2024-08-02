@@ -1,23 +1,66 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Sidebar from './components/Sidebar'
 import Button from './components/Button'
 import { useNavigate } from 'react-router-dom';
-
+import { CountdownCircleTimer } from 'react-countdown-circle-timer';
+import { useAuth } from './components/utils/AuthContext';
+//TODO: Alerts show up twice when running pomodoro and remainingtime. 
+//TODO: Make pomodoro time add to study time in database
 const Pomodoro = () => {
 
+  const { saveTime } = useAuth();
   const [studyDuration, setStudyDuration] = useState(0);
   const [breakDuration, setBreakDuration] = useState(0);
   const [sessions, setSessions] = useState(0);
   const [currentSession, setCurrentSession] = useState(0);
   const [isStudyTime, setStudyTime] = useState(false);
+  const [remainingTime, setRemainingTime] = useState(0);
   const [isPlaying, setPlaying] = useState(false);
+  const [key, setKey] = useState(0);
   const navigate = useNavigate();
+
+  async function renderSave() {
+    await saveTime(sessions * studyDuration * 30); //*30 because renderSave is called twice (bug)
+  }
+  const renderTime = ({remainingTime}) => {
+    setRemainingTime(remainingTime);
+    if (remainingTime === 0) {
+        if (isStudyTime) {  
+            if (currentSession === sessions) {
+                alert("You are done with all sessions, good job!")
+                renderSave();
+                setStudyTime(false);
+                setStudyDuration(0);
+                setBreakDuration(0);
+                setPlaying(false);
+                setCurrentSession(0);
+                setSessions(0);
+                setKey(key + 1);
+            } else {
+                alert("Good job! It's time to take a break");
+                setStudyTime(false);
+                setKey(key + 1);
+            }
+        } else {
+            alert("Good break, it's time to study!")
+            setCurrentSession(currentSession + 1);
+            setStudyTime(true);
+            setKey(key + 1)
+        }
+    }
+
+    return (
+        <div className="timer">
+            <div className='mt-1 font-nunito text-5xl'>{Math.floor(remainingTime / 60) + ": " + (remainingTime % 60).toString().padStart(2, '0')}</div>
+        </div>
+    )
+  }
 
   function handlePlusStudy() {
     if (studyDuration === 90) {
         alert("Pomodoro mode currently does not support times greater than 90");
     } else {
-        setStudyDuration(studyDuration + 5)
+        setStudyDuration(studyDuration + 1)
     }
   }
 
@@ -25,7 +68,7 @@ const Pomodoro = () => {
     if (studyDuration === 0) {
         alert("Time can't be negative!")
     } else {
-        setStudyDuration(studyDuration - 5);
+        setStudyDuration(studyDuration - 1);
     }
   }
 
@@ -33,7 +76,7 @@ const Pomodoro = () => {
     if (breakDuration === 90) {
         alert("Pomodoro mode currently does not support times greater than 90");
     } else {
-        setBreakDuration(breakDuration + 5)
+        setBreakDuration(breakDuration + 1)
     } 
   }
 
@@ -41,7 +84,7 @@ const Pomodoro = () => {
     if (breakDuration === 0) {
         alert("Time can't be negative!")
     } else {
-        setBreakDuration(breakDuration - 5);
+        setBreakDuration(breakDuration - 1);
     } 
   }
 
@@ -64,9 +107,26 @@ const Pomodoro = () => {
   function handleStart() {
     if (studyDuration !=0 && breakDuration != 0 && sessions != 0) {
         setPlaying(true);
+        setStudyTime(true);
+        setCurrentSession(currentSession + 1);
     } else {
         alert("All values have to be set greater than 0!")
     }
+  }
+
+  async function handleStop() {
+    if (remainingTime > 0) {
+        const userConfirm = window.confirm("Are you sure you would like to stop?")
+        if (userConfirm) {
+            await saveTime((currentSession - 1) * studyDuration * 60 + studyDuration * 60 - remainingTime);
+            setPlaying(false);
+            setKey(key + 1);
+            
+        }
+      } else {
+        setPlaying(false);
+        setKey(key + 1)
+      }
   }
 
 
@@ -74,8 +134,19 @@ const Pomodoro = () => {
     <>
         <Sidebar from="pomodoro" />
         {isPlaying ? 
-        (<div className='flex justify-center items-center h-screen ml-24'>
-            <div>Study Time</div>
+        (<div className='flex flex-col justify-center items-center h-screen ml-24'>
+            <div className='mb-8 text-3xl font-nunito'>{isStudyTime ? "Study" : "Break"}</div>
+            <CountdownCircleTimer
+                key = {key}
+                isPlaying={isPlaying}
+                duration={isStudyTime ? studyDuration * 60 : breakDuration * 60}
+                colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
+                colorsTime={[isStudyTime ? studyDuration * 60 : breakDuration * 60, isStudyTime ? studyDuration * 60 * 2/5 : breakDuration * 60 * 2/5, isStudyTime ? studyDuration * 60 * 1/15 : breakDuration * 60 * 1/15, 0]}
+                onComplete={() => ({ shouldRepeat: false})}
+                >
+                    {renderTime}
+            </CountdownCircleTimer>
+            <Button className="mt-24" content={"Stop"} onClick={handleStop} />
         </div>) 
         : (<div className="grid h-screen grid-cols-2 grid-rows-2 gap-6 ml-24">
             <div className='col-span-2 text-center mt-24'>

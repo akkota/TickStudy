@@ -12,7 +12,7 @@ const Dashboard = () => {
   const { user, saveTime } = useAuth();
 
   const renderTime = ({remainingTime}) => {
-    setRemainingTime(remainingTime)
+    setRemainingTime(remainingTime);
     if (remainingTime === 0) {
         return <div className='ml-12 text-3xl'>Take a break!</div>
     }
@@ -63,7 +63,7 @@ const Dashboard = () => {
 
   return (
     <div>
-        <Sidebar />
+        <Sidebar from="dashboard" />
         <div className="flex flex-col h-screen items-center justify-center ml-24">
             <div className="mr-2 mb-24 scale-150">
                 <CountdownCircleTimer
@@ -74,7 +74,7 @@ const Dashboard = () => {
                 colorsTime={[duration * 60, duration * 60 * 2/5, duration * 60 * 1/15, 0]}
                 onComplete={() => ({ shouldRepeat: false})}
                 >
-                    {renderTime}
+                    {playing && renderTime}
                 </CountdownCircleTimer>
             </div>
             {playing ? <Button onClick={handleStop} content="Stop"></Button> : (<div>

@@ -91,13 +91,14 @@ export const AuthProvider = ({ children }) => {
                     withCredentials: true,
                 }
             );
-    
+            
             if (response.data.error) {
+                console.log("Not recorded")
                 alert("There was an issue recording your study time.");
                 navigate("/dashboard");
             } else {
-                alert("Study time recorded!");
-                navigate("/dashboard");
+                console.log("Recorded")
+                navigate("/statistics");
             }
         } catch (err) {
             console.error(err);
