@@ -60,7 +60,7 @@ const Pomodoro = () => {
     if (studyDuration === 90) {
         alert("Pomodoro mode currently does not support times greater than 90");
     } else {
-        setStudyDuration(studyDuration + 1)
+        setStudyDuration(studyDuration + 5)
     }
   }
 
@@ -68,7 +68,7 @@ const Pomodoro = () => {
     if (studyDuration === 0) {
         alert("Time can't be negative!")
     } else {
-        setStudyDuration(studyDuration - 1);
+        setStudyDuration(studyDuration - 5);
     }
   }
 
