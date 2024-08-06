@@ -15,8 +15,7 @@ const Tasklist = () => {
   const [task, setTask] = useState('');
   const [priority, setPriority] = useState('normal')
   const [display, setDisplay] = useState(false);
-  const [alert, setAlert] = useState(null);
-  const {getTasks, addTask} = useAuth();
+  const { getTasks, addTask, alert, setAlert } = useAuth();
 
 
   useEffect(() => {

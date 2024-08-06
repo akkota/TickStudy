@@ -25,7 +25,6 @@ body {
   overflow-x: hidden;
   height: 100%;
   background-color: rgb(30 41 59);
-  background-image: url("./assets/batthern.png");
   background-blend-mode: lighten;
 }
 

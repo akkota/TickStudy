@@ -12,3 +12,10 @@ CREATE TABLE tasks (
 	priority VARCHAR(20),
 	FOREIGN KEY (user_id) REFERENCES users(id)
 )
+
+CREATE TABLE studytime (
+	user_id INTEGER NOT NULL,
+	study_date DATE NOT NULL,
+	study_time BIGINT,
+	FOREIGN KEY (user_id) REFERENCES users(id)	
+)

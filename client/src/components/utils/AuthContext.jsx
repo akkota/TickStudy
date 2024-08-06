@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [error, setError] = useState(null);
+    const [alert, setAlert] = useState(null);
 
     const loginUser = async (userInfo) => {
         const email = userInfo.email;
@@ -132,9 +133,37 @@ export const AuthProvider = ({ children }) => {
         } catch (err) {
             console.error(err);
             alert("There was an issue fetching your statistics")
-            navigate("/dashboard");
+            navigate(-1);
         }
 
+    }
+
+    async function getStudyTimeStat() {
+        try {
+            const response = await axiosJWT.post("http://localhost:5001/api/getstudytimestat",
+                {email: user.email},
+                {
+                    headers: {
+                        authorization: "Bearer " + user.accessToken,
+                    },
+                    withCredentials: true,
+                }
+            ); 
+
+            if (response.data.error) {
+                alert("There was an issue fetching your study time.")
+                navigate(-1);
+                return;
+            } else {
+                const studyStat = (response.data.studyStat)
+                return studyStat;
+            }
+
+        } catch (err) {
+            console.error(err);
+            alert("There was an issue fetching your statistics");
+            navigate(-1);
+        }
     }
 
     async function getTasks() {
@@ -199,16 +228,15 @@ export const AuthProvider = ({ children }) => {
             )
     
             if (response.data.error) {
-                alert("Issue removing task");
+                return "Issue removing task";
                 navigate(-1);
                 return;
             } else {
-                alert(response.data.message);
+                return (response.data.message);
             }
         } catch (err) {
             console.error(err);
-            alert("Issue removing task");
-            return;
+            return "Issue removing task";
         }
         
     }
@@ -221,6 +249,9 @@ export const AuthProvider = ({ children }) => {
         getTasks,
         addTask,
         removeTask,
+        alert,
+        getStudyTimeStat,
+        setAlert,
         error,
     };
 

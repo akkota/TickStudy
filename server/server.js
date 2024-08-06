@@ -172,15 +172,26 @@ app.post("/api/updatetime", verify, async (req, res) => {
   const { email, studytime } = req.body;
 
   try {
-    const user = await db.query(
-      "UPDATE users SET study_time= study_time + $2 WHERE email=$1 RETURNING *",
-      [email, studytime]
+    let user_id = await db.query("SELECT id FROM users WHERE email=$1", [
+      email,
+    ]);
+    user_id = user_id.rows[0].id;
+    const study_record = await db.query(
+      "SELECT * FROM studytime WHERE user_id=$1 AND study_date=CURRENT_DATE",
+      [user_id]
     );
-    if (user.rows.length > 0) {
-      res.json({ message: "Successfully updated!" });
+    if (study_record.rows.length > 0) {
+      await db.query(
+        "UPDATE studytime SET study_time = study_time + $2 WHERE user_id = $1 AND study_date = CURRENT_DATE",
+        [user_id, studytime]
+      );
     } else {
-      res.json({ error: "Email doesn't exist, login and try again" });
+      await db.query(
+        "INSERT INTO studytime (user_id, study_date, study_time) VALUES ($1, CURRENT_DATE, $2)",
+        [user_id, studytime]
+      );
     }
+    res.json({ message: "Successfully updated!" });
   } catch (err) {
     console.error(err);
     res.json({ error: err });
@@ -190,13 +201,39 @@ app.post("/api/updatetime", verify, async (req, res) => {
 app.post("/api/getstudytime", verify, async (req, res) => {
   const { email } = req.body;
   try {
-    let user = await db.query("SELECT study_time FROM users WHERE email=$1", [
+    let user_id = await db.query("SELECT id FROM users WHERE email=$1", [
       email,
     ]);
+    user_id = user_id.rows[0].id;
 
-    res.json({ studyTime: (user.rows[0].study_time / (60 * 60)).toFixed(2) });
+    const result = await db.query(
+      "SELECT SUM(study_time) AS total_study_time FROM studytime WHERE user_id = $1",
+      [user_id]
+    );
+
+    const totalStudyTime = result.rows[0].total_study_time;
+    res.json({ studyTime: (totalStudyTime / (60 * 60)).toFixed(2) });
   } catch (err) {
+    console.error(err);
     res.json({ error: err });
+  }
+});
+
+app.post("/api/getstudytimestat", async (req, res) => {
+  const { email } = req.body;
+  try {
+    let user_id = await db.query("SELECT id FROM users WHERE email=$1", [
+      email,
+    ]);
+    user_id = user_id.rows[0].id;
+    let studyStat = await db.query(
+      "SELECT TO_CHAR(study_date, 'YYYY-MM-DD') AS study_date, study_time FROM studytime WHERE user_id = $1",
+      [user_id]
+    );
+    res.status(200).json({ studyStat: studyStat.rows });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ error: err });
   }
 });
 

@@ -6,11 +6,13 @@ import { useAuth } from './AuthContext';
 const Task = (props) => {
   
   const [checked, setChecked] = useState(false);
-  const { removeTask } = useAuth();
+  const { removeTask, setAlert } = useAuth();
 
   async function handleChange() {
     setChecked(!checked);
-    await removeTask(props.content);
+   const alert = await removeTask(props.content);
+    setAlert(alert);
+    setTimeout(() => setAlert(null), 3000);
     setChecked(false);
   }
 
