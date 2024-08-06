@@ -200,6 +200,66 @@ app.post("/api/getstudytime", verify, async (req, res) => {
   }
 });
 
+app.post("/api/gettasks", verify, async (req, res) => {
+  const { email } = req.body;
+  try {
+    let user_id = await db.query("SELECT id FROM users WHERE email=$1", [
+      email,
+    ]);
+    user_id = user_id.rows[0].id;
+    let tasks = await db.query(
+      "SELECT task_title, priority FROM tasks WHERE user_id=$1",
+      [user_id]
+    );
+    tasks = tasks.rows;
+    res.status(200).json({ tasks: tasks });
+  } catch (err) {
+    res.status(400).json({ error: err });
+  }
+});
+
+//Adds tasks twice, there is an error
+app.post("/api/addtasks", verify, async (req, res) => {
+  try {
+    const { email, taskTitle, priority } = req.body;
+    let user_id = await db.query("SELECT id FROM users WHERE email=$1", [
+      email,
+    ]);
+    user_id = user_id.rows[0].id;
+    await db.query(
+      "INSERT INTO tasks (user_id, task_title, priority) VALUES ($1, $2, $3)",
+      [user_id, taskTitle, priority]
+    );
+    res.status(200).json({ message: "Task successfully added!" });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ error: err });
+  }
+});
+
+app.post("/api/removetasks", verify, async (req, res) => {
+  try {
+    const { email, taskTitle } = req.body;
+    let user_id = await db.query("SELECT id FROM users WHERE email=$1", [
+      email,
+    ]);
+    user_id = user_id.rows[0].id;
+    await db.query(
+      `DELETE FROM tasks
+       WHERE ctid = (
+         SELECT ctid FROM tasks
+         WHERE user_id=$1 AND task_title=$2
+         LIMIT 1
+       )`,
+      [user_id, taskTitle]
+    );
+    res.status(200).json({ message: "Task removed!" });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ error: err });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server is running on ${port}`);
 });

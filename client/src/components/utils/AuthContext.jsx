@@ -1,6 +1,8 @@
 import { useContext, useState, createContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode"; 
+import  Alert  from '@mui/material/Alert';
+import CheckIcon from '@mui/icons-material/Check';
 import axios from "axios";
 
 const AuthContext = createContext();
@@ -135,11 +137,90 @@ export const AuthProvider = ({ children }) => {
 
     }
 
+    async function getTasks() {
+        try {
+            const response = await axiosJWT.post("http://localhost:5001/api/gettasks", 
+                {email: user.email},
+                {
+                    headers: {
+                        authorization: "Bearer " + user.accessToken
+                    },
+                    withCredentials: true,
+                }
+            );
+
+            const tasks = response.data.tasks
+            return tasks
+
+        } catch (err) {
+            console.error(err);
+            alert("Issue fetching tasks")
+            navigate(-1)
+            return;
+        }
+    }
+
+    async function addTask(taskTitle, priority) {
+        try {
+            const response = await axiosJWT.post("http://localhost:5001/api/addtasks", 
+                {email: user.email, taskTitle, priority}, 
+                {
+                    headers: {
+                        authorization: "Bearer " + user.accessToken
+                    },
+                    withCredentials: true,
+                }
+            )
+
+            if (response.data.error) {
+                alert("Issue adding task");
+                navigate(-1)
+                return;
+            } else {
+                return response.data.message
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Issue adding task")
+            return;
+        }
+    }
+
+    async function removeTask(taskTitle) {
+        try {
+            const response = await axiosJWT.post("http://localhost:5001/api/removetasks", 
+                {email: user.email, taskTitle},
+                {
+                    headers: {
+                        authorization: "Bearer " + user.accessToken
+                    },
+                    withCredentials: true,
+                }
+            )
+    
+            if (response.data.error) {
+                alert("Issue removing task");
+                navigate(-1);
+                return;
+            } else {
+                alert(response.data.message);
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Issue removing task");
+            return;
+        }
+        
+    }
+
     let contextData = {
         user,
         loginUser,
         saveTime,
         getStudyTime,
+        getTasks,
+        addTask,
+        removeTask,
         error,
     };
 

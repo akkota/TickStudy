@@ -37,6 +37,10 @@ body {
 
 @layer utilities {
 
+  .card-task {
+    @apply flex flex-row justify-center items-center bg-blue-950 shadow-black rounded-lg w-[400px] h-auto p-4
+  }
+
   .card-login {
     @apply bg-blue-950 shadow-black shadow-md rounded-lg p-5 w-80 h-110
   }

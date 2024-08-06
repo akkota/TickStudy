@@ -9,5 +9,6 @@ CREATE TABLE users (
 CREATE TABLE tasks (
 	user_id INTEGER NOT NULL,
 	task_title TEXT NOT NULL,
+	priority VARCHAR(20),
 	FOREIGN KEY (user_id) REFERENCES users(id)
 )
