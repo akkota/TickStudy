@@ -29,7 +29,7 @@ const Tasklist = () => {
     };
 
     fetchTasks();
-  }, [getTasks, tasks]);
+  }, [getTasks]);
 
   function handleDisplay() {
     setDisplay(!display);
@@ -94,7 +94,7 @@ const Tasklist = () => {
         
         <div>
             {tasks.map((task, index) => {
-              return <Task key={index} content={task.task_title} />
+              return <Task key={index} content={task} />
             })}
         </div>
       </div>

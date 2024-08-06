@@ -260,6 +260,30 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    async function getStreak() {
+        try {
+            const response = await axiosJWT.post("http://localhost:5001/api/getstreak", 
+                {email: user.email},
+                {
+                    headers: {
+                        authorization: "Bearer " + user.accessToken
+                    },
+                    withCredentials: true,
+                }
+            )
+
+            if (response.data.error) {
+                window.alert("Issue getting streak");
+                navigate(-1);
+            } else {
+                return response.data.streak;
+            }
+
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
     let contextData = {
         user,
         loginUser,
@@ -269,6 +293,7 @@ export const AuthProvider = ({ children }) => {
         addTask,
         removeTask,
         alert,
+        getStreak,
         getStudyTimeStat,
         updateStreak,
         setAlert,

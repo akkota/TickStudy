@@ -36,8 +36,16 @@ body {
 
 @layer utilities {
 
-  .card-task {
-    @apply flex flex-row justify-center items-center bg-blue-950 shadow-black rounded-lg w-[400px] h-auto p-4
+  .card-task-easy {
+    @apply flex flex-row justify-center items-center bg-green-700 shadow-black rounded-lg w-[400px] h-auto p-4
+  }
+
+  .card-task-medium {
+    @apply flex flex-row justify-center items-center bg-yellow-700 shadow-black rounded-lg w-[400px] h-auto p-4
+  }
+
+  .card-task-hard {
+    @apply flex flex-row justify-center items-center bg-red-700 shadow-black rounded-lg w-[400px] h-auto p-4
   }
 
   .card-login {
