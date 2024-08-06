@@ -30,7 +30,7 @@ const Statistics = () => {
     <>
       <div className="flex flex-col h-screen items-center justify-center ml-24">
           <Sidebar from="statistics"/>
-          <div className="font-nunito text-8xl mb-12">Study time</div>
+          <div className="font-nunito text-8xl mb-12 mt-[600px]">Study time</div>
           <div className='font-nunito text-9xl text-transparent gradient-text animate-gradient mb-48'> {studyHours} hours </div>
           <Linegraph content={studyTimeStat} />
       </div>

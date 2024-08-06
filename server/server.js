@@ -190,6 +190,9 @@ app.post("/api/updatetime", verify, async (req, res) => {
         "INSERT INTO studytime (user_id, study_date, study_time) VALUES ($1, CURRENT_DATE, $2)",
         [user_id, studytime]
       );
+      await db.query("UPDATE users SET streak = streak + 1 WHERE id = $1", [
+        user_id,
+      ]);
     }
     res.json({ message: "Successfully updated!" });
   } catch (err) {
@@ -291,6 +294,29 @@ app.post("/api/removetasks", verify, async (req, res) => {
       [user_id, taskTitle]
     );
     res.status(200).json({ message: "Task removed!" });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ error: err });
+  }
+});
+
+app.post("/api/updatestreak", verify, async (req, res) => {
+  try {
+    const { email } = req.body;
+    let user_id = await db.query("SELECT id FROM users WHERE email=$1", [
+      email,
+    ]);
+    user_id = user_id.rows[0].id;
+    const result = await db.query(
+      "SELECT * FROM studytime WHERE user_id = $1 AND study_date = CURRENT_DATE - INTERVAL '1 day'",
+      [user_id]
+    );
+
+    if (result.rows.length < 1) {
+      await db.query("UPDATE users SET streak=0 WHERE id=$1", [user_id]);
+    }
+
+    res.status(200).json({ message: "Successful" });
   } catch (err) {
     console.error(err);
     res.status(400).json({ error: err });

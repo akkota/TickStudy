@@ -9,7 +9,11 @@ const Dashboard = () => {
   const [duration, setDuration] = useState(1);
   const [key, setKey] = useState(0);
   const [remainingTime, setRemainingTime] = useState(duration * 60);
-  const { user, saveTime } = useAuth();
+  const { user, saveTime, updateStreak } = useAuth();
+
+  useEffect(() => {
+    updateStreak();
+  })
 
   const renderTime = ({remainingTime}) => {
     setRemainingTime(remainingTime);

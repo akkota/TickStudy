@@ -97,7 +97,7 @@ export const AuthProvider = ({ children }) => {
             
             if (response.data.error) {
                 console.log("Not recorded")
-                alert("There was an issue recording your study time.");
+                window.alert("There was an issue recording your study time.");
                 navigate("/dashboard");
             } else {
                 console.log("Recorded")
@@ -105,7 +105,7 @@ export const AuthProvider = ({ children }) => {
             }
         } catch (err) {
             console.error(err);
-            alert("There was an issue recording your study time.");
+            window.alert("There was an issue recording your study time.");
             navigate("/dashboard");
         }
     }
@@ -123,7 +123,7 @@ export const AuthProvider = ({ children }) => {
             );
     
             if (response.data.error) {
-                alert("There was an issue fetching your study time.")
+                window.alert("There was an issue fetching your study time.")
                 navigate(-1);
                 return;
             } else {
@@ -132,7 +132,7 @@ export const AuthProvider = ({ children }) => {
             }
         } catch (err) {
             console.error(err);
-            alert("There was an issue fetching your statistics")
+            window.alert("There was an issue fetching your statistics")
             navigate(-1);
         }
 
@@ -151,7 +151,7 @@ export const AuthProvider = ({ children }) => {
             ); 
 
             if (response.data.error) {
-                alert("There was an issue fetching your study time.")
+                window.lert("There was an issue fetching your study time.")
                 navigate(-1);
                 return;
             } else {
@@ -161,7 +161,7 @@ export const AuthProvider = ({ children }) => {
 
         } catch (err) {
             console.error(err);
-            alert("There was an issue fetching your statistics");
+            window.alert("There was an issue fetching your statistics");
             navigate(-1);
         }
     }
@@ -183,7 +183,7 @@ export const AuthProvider = ({ children }) => {
 
         } catch (err) {
             console.error(err);
-            alert("Issue fetching tasks")
+            window.alert("Issue fetching tasks")
             navigate(-1)
             return;
         }
@@ -202,7 +202,7 @@ export const AuthProvider = ({ children }) => {
             )
 
             if (response.data.error) {
-                alert("Issue adding task");
+                window.alert("Issue adding task");
                 navigate(-1)
                 return;
             } else {
@@ -210,7 +210,7 @@ export const AuthProvider = ({ children }) => {
             }
         } catch (err) {
             console.error(err);
-            alert("Issue adding task")
+            window.alert("Issue adding task")
             return;
         }
     }
@@ -229,8 +229,6 @@ export const AuthProvider = ({ children }) => {
     
             if (response.data.error) {
                 return "Issue removing task";
-                navigate(-1);
-                return;
             } else {
                 return (response.data.message);
             }
@@ -239,6 +237,27 @@ export const AuthProvider = ({ children }) => {
             return "Issue removing task";
         }
         
+    }
+
+    async function updateStreak() {
+        try {
+            const response = await axiosJWT.post("http://localhost:5001/api/updatestreak", 
+                {email: user.email},
+                {
+                    headers: {
+                        authorization: "Bearer " + user.accessToken
+                    },
+                    withCredentials: true,
+                }
+            )
+
+            if (response.data.error) {
+                window.alert("Issue updating streak");
+            }
+
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     let contextData = {
@@ -251,6 +270,7 @@ export const AuthProvider = ({ children }) => {
         removeTask,
         alert,
         getStudyTimeStat,
+        updateStreak,
         setAlert,
         error,
     };
