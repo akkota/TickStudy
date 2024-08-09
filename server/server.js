@@ -321,7 +321,7 @@ app.post("/api/updatestreak", verify, async (req, res) => {
       res.status(200).json({ message: "Successful" });
     }
 
-    if (!result_2) {
+    if (result_2.rows.length === 0) {
       await db.query("UPDATE users SET streak=0 WHERE id=$1", [user_id]);
     }
 

@@ -23,7 +23,7 @@ const Statistics = () => {
         setStudyTimeStat(studyTimeStat);
       }
       const streakCounter = await getStreak()
-      if (streakCounter) {
+      if (streakCounter >= 0) {
         setStreak(streakCounter);
       }
     };
