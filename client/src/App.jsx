@@ -8,6 +8,7 @@ import PrivateRoutes from './components/utils/PrivateRoutes';
 import Statistics from './Statistics';
 import Pomodoro from './Pomodoro';
 import Tasklist from './Tasklist'
+import Habits from './Habits';
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
               <Route path="/statistics" element={<Statistics />}></Route>
               <Route path="/pomodoro" element={<Pomodoro />}></Route>
               <Route path="/tasklist" element={<Tasklist />}></Route>
+              <Route path="/habits" element={<Habits />}></Route>
             </Route>
           </Routes>
         </AuthProvider>

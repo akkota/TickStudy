@@ -4,6 +4,7 @@ import { FiActivity } from "react-icons/fi";
 import { GiTomato } from "react-icons/gi";
 import { VscCheck } from "react-icons/vsc";
 import { Navigate, useNavigate } from 'react-router-dom';
+import { BiRun } from "react-icons/bi";
 
 const Sidebar = (props) => {
 
@@ -11,6 +12,7 @@ const Sidebar = (props) => {
   const [statistics, setStatistics] = useState('sidebar-icon')
   const [pomodoro, setPomodoro] = useState('sidebar-icon');
   const [tasks, setTasks] = useState('sidebar-icon');
+  const [habits, setHabits] = useState('sidebar-icon')
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,21 +21,31 @@ const Sidebar = (props) => {
       setStatistics('sidebar-icon sidebar-active')
       setPomodoro('sidebar-icon');
       setTasks('sidebar-icon');
+      setHabits('sidebar-icon')
     } else if (props.from === "dashboard") {
       setDashboard('sidebar-icon sidebar-active');
       setStatistics('sidebar-icon');
       setPomodoro('sidebar-icon');
       setTasks('sidebar-icon');
+      setHabits('sidebar-icon')
     } else if (props.from === "pomodoro") {
       setStatistics('sidebar-icon');
       setDashboard('sidebar-icon')
       setPomodoro('sidebar-icon sidebar-active');
       setTasks('sidebar-icon');
+      setHabits('sidebar-icon')
     } else if (props.from === "tasklist") {
       setTasks('sidebar-icon sidebar-active');
       setStatistics('sidebar-icon');
       setDashboard('sidebar-icon')
       setPomodoro('sidebar-icon')
+      setHabits('sidebar-icon')
+    } else if (props.from === "habits") {
+      setTasks('sidebar-icon');
+      setStatistics('sidebar-icon');
+      setDashboard('sidebar-icon')
+      setPomodoro('sidebar-icon') 
+      setHabits('sidebar-icon sidebar-active')
     }
   }, [props.from])
   
@@ -54,6 +66,10 @@ const Sidebar = (props) => {
     navigate('/tasklist')
   }
 
+  function handleHabits() {
+    navigate('/habits')
+  }
+
   return (
     <div className="fixed top-0 left-0 h-screen w-16 m-0 flex flex-col bg-slate-600 text-white shadow-lg">
         <div className="relative group">
@@ -71,6 +87,10 @@ const Sidebar = (props) => {
         <div className='relative group'>
             <VscCheck onClick={handleTasks} className={tasks} />
             <span className='sidebar-tooltip group-hover:scale-100'>Tasks</span> 
+        </div>
+        <div className='relative group'>
+            <BiRun onClick={handleHabits} className={habits} />
+            <span className='sidebar-tooltip group-hover:scale-100'>Habits</span> 
         </div>
     </div>
   )

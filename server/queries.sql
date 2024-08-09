@@ -19,3 +19,12 @@ CREATE TABLE studytime (
 	study_time BIGINT,
 	FOREIGN KEY (user_id) REFERENCES users(id)	
 )
+
+CREATE TABLE habits (
+	user_id INTEGER NOT NULL,
+	last_done DATE,
+	streak INTEGER,
+	FOREIGN KEY (user_id) REFERENCES users(id)
+)
+
+ALTER TABLE users ADD COLUMN habit_name VARCHAR(300);

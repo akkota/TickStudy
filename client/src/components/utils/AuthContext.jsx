@@ -284,6 +284,80 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    async function submitHabit(habitTitle) {
+
+        try {
+            const response = await axiosJWT.post("http://localhost:5001/api/addhabit", 
+                {email: user.email, habitTitle},
+                {
+                    headers: {
+                        authorization: "Bearer " + user.accessToken
+                    },
+                    withCredentials: true,
+                }
+            )
+    
+            if (response.data.error) {
+                window.alert("Issue submitting habit");
+                navigate(-1);
+                return;
+            } else {
+                return response.data.message;
+            }
+
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    async function getHabit() {
+
+        try {
+            const response = await axiosJWT.post("http://localhost:5001/api/gethabit", 
+                {email: user.email},
+                {
+                    headers: {
+                        authorization: "Bearer " + user.accessToken
+                    },
+                    withCredentials: true,
+                }
+            )
+
+            if (response.data.error) {
+                window.alert("Issue getting habit");
+                navigate(-1);
+                return;
+            } else {
+                return response.data.habits
+            }
+        } catch (err) {
+            console.error(err);
+        }
+
+    }
+
+    async function updateStreakHabit(habitName) {
+        try {
+            const response = await axiosJWT.post("http://localhost:5001/api/updatestreakhabit",
+                {email: user.email, habitName},
+                {
+                    headers: {
+                        authorization: "Bearer " + user.accessToken
+                    },
+                    withCredentials: true,
+                }
+            )
+
+            if (response.data.error) {
+                window.alert("Could not update streak");
+                navigate(-1);
+                return;
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
     let contextData = {
         user,
         loginUser,
@@ -297,6 +371,9 @@ export const AuthProvider = ({ children }) => {
         getStudyTimeStat,
         updateStreak,
         setAlert,
+        submitHabit,
+        updateStreakHabit,
+        getHabit,
         error,
     };
 

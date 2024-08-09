@@ -22,7 +22,7 @@ const Task = (props) => {
             {checked ? (<GoCheckCircleFill id={props.id} onClick={handleChange} className='mr-3 text-emerald-600 text-xl hover:cursor-pointer'/>)
             : (<GoCheckCircle id={props.id} onClick={handleChange} className="mr-3 text-emerald-400 hover:text-emerald-600 hover:cursor-pointer text-xl"/>)}
 
-            <label className={"font-nunito text-lg " + (checked ? "line-through" : "") } htmlfor={props.id}>{props.content.task_title}</label>
+            <label className={"font-nunito text-lg " + (checked ? "line-through" : "") } htmlFor={props.id}>{props.content.task_title}</label>
         </div>
     </div>
   )

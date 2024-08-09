@@ -345,6 +345,90 @@ app.post("/api/getstreak", verify, async (req, res) => {
   }
 });
 
+app.post("/api/addhabit", verify, async (req, res) => {
+  const { email, habitTitle } = req.body;
+  try {
+    let user_id = await db.query("SELECT id FROM users WHERE email=$1", [
+      email,
+    ]);
+    user_id = user_id.rows[0].id;
+
+    await db.query(
+      "INSERT INTO habits (user_id, last_done, streak, habit_name) VALUES ($1, $2, $3, $4)",
+      [user_id, "2000-09-09", 0, habitTitle]
+    );
+
+    res.status(200).json({ message: "Successful" });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ error: err });
+  }
+});
+
+app.post("/api/gethabit", verify, async (req, res) => {
+  const { email } = req.body;
+  try {
+    let user_id = await db.query("SELECT id FROM users WHERE email=$1", [
+      email,
+    ]);
+    user_id = user_id.rows[0].id;
+
+    let habits = await db.query(
+      "SELECT last_done, streak, habit_name FROM habits WHERE user_id=$1",
+      [user_id]
+    );
+
+    habits = habits.rows;
+
+    await Promise.all(
+      habits.map(async (habit) => {
+        const currentDate = new Date().toISOString().split("T")[0];
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayString = yesterday.toISOString().split("T")[0];
+        const habitLastDoneString = new Date(habit.last_done)
+          .toISOString()
+          .split("T")[0];
+        if (habitLastDoneString === yesterdayString) {
+          return;
+        } else {
+          if (habitLastDoneString !== currentDate) {
+            await db.query("UPDATE habits SET streak=0 WHERE habit_name=$1", [
+              habit.habitName,
+            ]);
+            habit.streak = 0;
+          }
+        }
+      })
+    );
+
+    res.status(200).json({ habits: habits });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ error: err });
+  }
+});
+
+app.post("/api/updatestreakhabit", verify, async (req, res) => {
+  try {
+    const { email, habitName } = req.body;
+    let user_id = await db.query("SELECT id FROM users WHERE email=$1", [
+      email,
+    ]);
+    user_id = user_id.rows[0].id;
+
+    await db.query(
+      "UPDATE habits SET streak = streak + 1, last_done = CURRENT_DATE WHERE habit_name = $1 AND user_id = $2",
+      [habitName, user_id]
+    );
+
+    res.status(200).json({ message: "Successful" });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ error: err.message });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server is running on ${port}`);
 });
