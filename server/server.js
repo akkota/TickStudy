@@ -319,6 +319,7 @@ app.post("/api/updatestreak", verify, async (req, res) => {
 
     if (result.rows.length >= 1) {
       res.status(200).json({ message: "Successful" });
+      return;
     }
 
     if (result_2.rows.length === 0) {
@@ -326,9 +327,11 @@ app.post("/api/updatestreak", verify, async (req, res) => {
     }
 
     res.status(200).json({ message: "Successful" });
+    return;
   } catch (err) {
     console.error(err);
     res.status(400).json({ error: err });
+    return;
   }
 });
 
