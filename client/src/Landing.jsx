@@ -12,7 +12,7 @@ const Landing = () => {
 
   return (
     <div className="text-center mt-36">
-      <h1 className="mb-12 font-nunito text-7xl text-blue-100">Study Tick - v 1.0.0</h1>
+      <h1 className="mb-12 font-nunito text-7xl text-blue-100">TickStudy - v 1.0.0</h1>
       <Button onClick={handleClick} content="Start"></Button>
     </div>
   )
