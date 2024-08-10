@@ -65,7 +65,7 @@ const Pomodoro = () => {
     if (studyDuration === 90) {
         window.alert("Pomodoro mode currently does not support times greater than 90");
     } else {
-        setStudyDuration(studyDuration + 0.1)
+        setStudyDuration(studyDuration + 5)
     }
   }
 
@@ -73,7 +73,7 @@ const Pomodoro = () => {
     if (studyDuration === 0) {
         window.alert("Time can't be negative!")
     } else {
-        setStudyDuration(studyDuration - 0.1);
+        setStudyDuration(studyDuration - 5);
     }
   }
 
@@ -81,7 +81,7 @@ const Pomodoro = () => {
     if (breakDuration === 90) {
         window.alert("Pomodoro mode currently does not support times greater than 90");
     } else {
-        setBreakDuration(breakDuration + 0.1)
+        setBreakDuration(breakDuration + 1)
     } 
   }
 
@@ -89,7 +89,7 @@ const Pomodoro = () => {
     if (breakDuration === 0) {
         window.alert("Time can't be negative!")
     } else {
-        setBreakDuration(breakDuration - 0.1);
+        setBreakDuration(breakDuration - 1);
     } 
   }
 
