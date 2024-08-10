@@ -10,7 +10,7 @@ const Habit = (props) => {
   const [streak, setStreak] = useState(props.streak)
   const { updateStreakHabit } = useAuth();
   useEffect(() => {
-    const currentDate = new Date().toISOString().split('T')[0];
+    const currentDate = new Date().toLocaleDateString('en-CA'); 
     const lastDone = props.date.split('T')[0];
     if (lastDone === currentDate) {
       setChecked(true);

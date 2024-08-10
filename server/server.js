@@ -382,10 +382,10 @@ app.post("/api/gethabit", verify, async (req, res) => {
 
     await Promise.all(
       habits.map(async (habit) => {
-        const currentDate = new Date().toISOString().split("T")[0];
+        const currentDate = new Date().toLocaleDateString("en-CA");
         const yesterday = new Date();
         yesterday.setDate(yesterday.getDate() - 1);
-        const yesterdayString = yesterday.toISOString().split("T")[0];
+        const yesterdayString = yesterday.toLocaleDateString("en-CA");
         const habitLastDoneString = new Date(habit.last_done)
           .toISOString()
           .split("T")[0];
