@@ -8,6 +8,7 @@ import axios from 'axios'
 import Alert from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';
 import Button from './components/Button';
+import Coin from './components/Coin';
 
 const Tasklist = () => {
 
@@ -58,6 +59,7 @@ const Tasklist = () => {
   return (
     <>
       <Sidebar from="tasklist" />
+      <Coin />
       <div className="ml-24 flex flex-col h-screen justify-center items-center">
         {
           alert &&

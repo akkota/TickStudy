@@ -358,6 +358,29 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    async function getCoins() {
+        try {
+            const response = await axiosJWT.post("http://localhost:5001/api/getcoins",
+                {email: user.email},
+                {
+                    headers: {
+                        authorization: "Bearer " + user.accessToken
+                    },
+                    withCredentials: true,
+                }
+            )
+
+            if (response.data.error) {
+                window.alert("Could not get coins");
+                return;
+            }
+
+            return response.data.coins
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
     let contextData = {
         user,
         loginUser,
@@ -374,6 +397,7 @@ export const AuthProvider = ({ children }) => {
         submitHabit,
         updateStreakHabit,
         getHabit,
+        getCoins,
         error,
     };
 

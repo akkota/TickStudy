@@ -104,7 +104,7 @@ app.post("/api/signup", async (req, res) => {
         }
 
         let user = await db.query(
-          "INSERT INTO users (email, password, refresh_token) VALUES ($1, $2, $3) RETURNING *",
+          "INSERT INTO users (email, password, refresh_token, coins) VALUES ($1, $2, $3, 0) RETURNING *",
           [email, hash, refreshToken]
         );
 
@@ -194,6 +194,12 @@ app.post("/api/updatetime", verify, async (req, res) => {
         user_id,
       ]);
     }
+
+    await db.query("UPDATE users SET coins=coins+$1 WHERE id=$2", [
+      Math.round(studytime / 60),
+      user_id,
+    ]);
+
     res.json({ message: "Successfully updated!" });
   } catch (err) {
     console.error(err);
@@ -426,6 +432,19 @@ app.post("/api/updatestreakhabit", verify, async (req, res) => {
     );
 
     res.status(200).json({ message: "Successful" });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.post("/api/getcoins", async (req, res) => {
+  try {
+    const { email } = req.body;
+    let coins = await db.query("SELECT coins FROM users WHERE email=$1", [
+      email,
+    ]);
+    res.status(200).json({ coins: coins.rows[0].coins });
   } catch (err) {
     console.error(err);
     res.status(400).json({ error: err.message });

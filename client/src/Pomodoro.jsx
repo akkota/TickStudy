@@ -6,6 +6,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import { useNavigate } from 'react-router-dom';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 import { useAuth } from './components/utils/AuthContext';
+import Coin from './components/Coin';
 //TODO: Alerts show up twice when running pomodoro and remainingtime. 
 //TODO: Make pomodoro time add to study time in database
 const Pomodoro = () => {
@@ -139,71 +140,77 @@ const Pomodoro = () => {
     <>
         <Sidebar from="pomodoro" />
         {isPlaying ? 
-        (<div className='flex flex-col justify-center items-center h-screen ml-24'>
-            {
-                alert &&
-                <Alert className="absolute top-6" icon={<CheckIcon fontSize="inherit" />} variant="filled" severity="success">
-                    {alert}
-                </Alert>
-            }
-            <div className='mb-8 text-3xl font-nunito'>{isStudyTime ? "Study" : "Break"}</div>
-            <CountdownCircleTimer
-                key = {key}
-                isPlaying={isPlaying}
-                duration={isStudyTime ? studyDuration * 60 : breakDuration * 60}
-                colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
-                colorsTime={[isStudyTime ? studyDuration * 60 : breakDuration * 60, isStudyTime ? studyDuration * 60 * 2/5 : breakDuration * 60 * 2/5, isStudyTime ? studyDuration * 60 * 1/15 : breakDuration * 60 * 1/15, 0]}
-                onComplete={() => ({ shouldRepeat: false})}
-                >
-                    {renderTime}
-            </CountdownCircleTimer>
-            <Button className="mt-24" content={"Stop"} onClick={handleStop} />
+        (<div>
+            <Coin />
+            <div className='flex flex-col justify-center items-center h-screen ml-24'>
+                {
+                    alert &&
+                    <Alert className="absolute top-6" icon={<CheckIcon fontSize="inherit" />} variant="filled" severity="success">
+                        {alert}
+                    </Alert>
+                }
+                <div className='mb-8 text-3xl font-nunito'>{isStudyTime ? "Study" : "Break"}</div>
+                <CountdownCircleTimer
+                    key = {key}
+                    isPlaying={isPlaying}
+                    duration={isStudyTime ? studyDuration * 60 : breakDuration * 60}
+                    colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
+                    colorsTime={[isStudyTime ? studyDuration * 60 : breakDuration * 60, isStudyTime ? studyDuration * 60 * 2/5 : breakDuration * 60 * 2/5, isStudyTime ? studyDuration * 60 * 1/15 : breakDuration * 60 * 1/15, 0]}
+                    onComplete={() => ({ shouldRepeat: false})}
+                    >
+                        {renderTime}
+                </CountdownCircleTimer>
+                <Button className="mt-24" content={"Stop"} onClick={handleStop} />
+            </div>
         </div>) 
-        : (<div className="grid h-screen grid-cols-2 grid-rows-2 gap-6 ml-24">
-            {
-                alert &&
-                <Alert className="absolute top-6" icon={<CheckIcon fontSize="inherit" />} variant="filled" severity="success">
-                    {alert}
-                </Alert>
-            }
-            <div className='col-span-2 text-center mt-24'>
-                <h3 className='mt-12 mb-4 text-5xl font-nunito'>Number of sessions</h3>
-                <p className='font-nunito mb-6 text-5xl'> {sessions}</p>
-                <div className='flex-col'>
-                    <div>
-                        <Button id="plus-session" className="mr-12" content={"+"} onClick={handleSession}>
+        : (<div>
+            <Coin />
+            <div className="grid h-screen grid-cols-2 grid-rows-2 gap-6 ml-24">
+                {
+                    alert &&
+                    <Alert className="absolute top-6" icon={<CheckIcon fontSize="inherit" />} variant="filled" severity="success">
+                        {alert}
+                    </Alert>
+                }
+                <div className='col-span-2 text-center mt-24'>
+                    <h3 className='mt-12 mb-4 text-5xl font-nunito'>Number of sessions</h3>
+                    <p className='font-nunito mb-6 text-5xl'> {sessions}</p>
+                    <div className='flex-col'>
+                        <div>
+                            <Button id="plus-session" className="mr-12" content={"+"} onClick={handleSession}>
 
-                        </Button>
-                        <Button id="minus-session" content={"-"} onClick={handleSession}>
+                            </Button>
+                            <Button id="minus-session" content={"-"} onClick={handleSession}>
+
+                            </Button>
+                        </div>
+                        <Button className="mt-48 scale-150" content="Start" onClick={handleStart}>
 
                         </Button>
                     </div>
-                    <Button className="mt-48 scale-150" content="Start" onClick={handleStart}>
+                </div>
+                <div className='text-center'>
+                    <h2 className='font-nunito mb-12 text-5xl'>Study Time</h2>
+                    <p className='font-nunito mb-8 text-5xl'> {studyDuration} : 00</p>
+                    <Button className="mr-12" content={"+5"} onClick={handlePlusStudy}>
+
+                    </Button>
+                    <Button content={"-5"} onClick={handleMinusStudy}>
 
                     </Button>
                 </div>
+                <div className='text-center'>
+                <h2 className='font-nunito mb-12 text-5xl'>Break Time</h2>
+                    <p className='font-nunito mb-8 text-5xl'> {breakDuration} : 00</p>
+                    <Button className="mr-12" content={"+"} onClick={handlePlusBreak}>
+
+                    </Button>
+                    <Button content={"-"} onClick={handleMinusBreak}>
+
+                    </Button> 
+                </div>
             </div>
-            <div className='text-center'>
-                <h2 className='font-nunito mb-12 text-5xl'>Study Time</h2>
-                <p className='font-nunito mb-8 text-5xl'> {studyDuration} : 00</p>
-                <Button className="mr-12" content={"+5"} onClick={handlePlusStudy}>
-
-                </Button>
-                <Button content={"-5"} onClick={handleMinusStudy}>
-
-                </Button>
-            </div>
-            <div className='text-center'>
-            <h2 className='font-nunito mb-12 text-5xl'>Break Time</h2>
-                <p className='font-nunito mb-8 text-5xl'> {breakDuration} : 00</p>
-                <Button className="mr-12" content={"+"} onClick={handlePlusBreak}>
-
-                </Button>
-                <Button content={"-"} onClick={handleMinusBreak}>
-
-                </Button> 
-            </div>
-        </div>)}
+            </div>)}
         
     </>
   )

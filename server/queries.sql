@@ -27,4 +27,5 @@ CREATE TABLE habits (
 	FOREIGN KEY (user_id) REFERENCES users(id)
 )
 
-ALTER TABLE users ADD COLUMN habit_name VARCHAR(300);
+ALTER TABLE habits ADD COLUMN habit_name VARCHAR(300);
+ALTER TABLE users ADD COLUMN coins INTEGER;

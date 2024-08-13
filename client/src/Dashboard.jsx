@@ -3,6 +3,8 @@ import { useAuth } from './components/utils/AuthContext'
 import Sidebar from './components/Sidebar';
 import Button from './components/Button';
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
+import Coin from './components/Coin';
+
 const Dashboard = () => {
 
   const [playing, setPlaying] = useState(false)
@@ -68,6 +70,7 @@ const Dashboard = () => {
   return (
     <div>
         <Sidebar from="dashboard" />
+        <Coin />
         <div className="flex flex-col h-screen items-center justify-center ml-24">
             <div className="mr-2 mb-24 scale-150">
                 <CountdownCircleTimer
@@ -81,7 +84,8 @@ const Dashboard = () => {
                     {playing && renderTime}
                 </CountdownCircleTimer>
             </div>
-            {playing ? <Button onClick={handleStop} content="Stop"></Button> : (<div>
+            {playing ? <Button onClick={handleStop} content="Stop"></Button> : (
+              <div>
                 <div className={(duration >= 10 ? " ml-[21px]" : "")}>
                     <div className='mb-10'>
                         <Button className="ml-8" onClick={handleStart} content="Start"></Button>

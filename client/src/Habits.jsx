@@ -5,6 +5,7 @@ import Modal from '@mui/material/Modal';
 import { GoPlusCircle } from 'react-icons/go';
 import Button from './components/Button';
 import { useAuth } from './components/utils/AuthContext';
+import Coin from './components/Coin';
 
 const Habits = () => {
     const [modalVisible, setModalVisible] = useState(false);
@@ -44,6 +45,7 @@ const Habits = () => {
     return (
         <>
             <Sidebar from="habits" />
+            <Coin />
             <div className="ml-24 flex flex-col h-screen justify-center items-center">
                 <div className="flex flex-row mb-12">
                     <h2 className="font-nunito text-5xl">Habits</h2>
