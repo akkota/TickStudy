@@ -27,5 +27,14 @@ CREATE TABLE habits (
 	FOREIGN KEY (user_id) REFERENCES users(id)
 )
 
+CREATE TABLE shop (
+	user_id INTEGER NOT NULL,
+	bronze_medal BOOLEAN NOT NULL,
+	silver_medal BOOLEAN NOT NULL,
+	gold_medal BOOLEAN NOT NULL,
+	diamond_medal BOOLEAN NOT NULL,
+	FOREIGN KEY (user_id) REFERENCES users(id)
+)
+
 ALTER TABLE habits ADD COLUMN habit_name VARCHAR(300);
 ALTER TABLE users ADD COLUMN coins INTEGER;

@@ -5,6 +5,7 @@ import { GiTomato } from "react-icons/gi";
 import { VscCheck } from "react-icons/vsc";
 import { Navigate, useNavigate } from 'react-router-dom';
 import { BiRun } from "react-icons/bi";
+import { FaShoppingCart } from "react-icons/fa";
 
 const Sidebar = (props) => {
 
@@ -12,7 +13,8 @@ const Sidebar = (props) => {
   const [statistics, setStatistics] = useState('sidebar-icon')
   const [pomodoro, setPomodoro] = useState('sidebar-icon');
   const [tasks, setTasks] = useState('sidebar-icon');
-  const [habits, setHabits] = useState('sidebar-icon')
+  const [habits, setHabits] = useState('sidebar-icon');
+  const [shop, setShop] = useState('sidebar-icon');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,30 +24,42 @@ const Sidebar = (props) => {
       setPomodoro('sidebar-icon');
       setTasks('sidebar-icon');
       setHabits('sidebar-icon')
+      setShop('sidebar-icon')
     } else if (props.from === "dashboard") {
       setDashboard('sidebar-icon sidebar-active');
       setStatistics('sidebar-icon');
       setPomodoro('sidebar-icon');
       setTasks('sidebar-icon');
       setHabits('sidebar-icon')
+      setShop('sidebar-icon')
     } else if (props.from === "pomodoro") {
       setStatistics('sidebar-icon');
       setDashboard('sidebar-icon')
       setPomodoro('sidebar-icon sidebar-active');
       setTasks('sidebar-icon');
       setHabits('sidebar-icon')
+      setShop('sidebar-icon')
     } else if (props.from === "tasklist") {
       setTasks('sidebar-icon sidebar-active');
       setStatistics('sidebar-icon');
       setDashboard('sidebar-icon')
       setPomodoro('sidebar-icon')
       setHabits('sidebar-icon')
+      setShop('sidebar-icon')
     } else if (props.from === "habits") {
       setTasks('sidebar-icon');
       setStatistics('sidebar-icon');
       setDashboard('sidebar-icon')
       setPomodoro('sidebar-icon') 
       setHabits('sidebar-icon sidebar-active')
+      setShop('sidebar-icon')
+    } else if (props.from === "shop") {
+      setTasks('sidebar-icon');
+      setStatistics('sidebar-icon');
+      setDashboard('sidebar-icon')
+      setPomodoro('sidebar-icon')
+      setHabits('sidebar-icon') ;
+      setShop('sidebar-icon sidebar-active');
     }
   }, [props.from])
   
@@ -70,6 +84,10 @@ const Sidebar = (props) => {
     navigate('/habits')
   }
 
+  function handleShop() {
+    navigate('/shop')
+  }
+
   return (
     <div className="fixed top-0 left-0 h-screen w-16 m-0 flex flex-col bg-slate-600 text-white shadow-lg">
         <div className="relative group">
@@ -91,6 +109,10 @@ const Sidebar = (props) => {
         <div className='relative group'>
             <BiRun onClick={handleHabits} className={habits} />
             <span className='sidebar-tooltip group-hover:scale-100'>Habits</span> 
+        </div>
+        <div className='relative group'>
+            <FaShoppingCart onClick={handleShop} className={shop} />
+            <span className='sidebar-tooltip group-hover:scale-100'>Shop</span> 
         </div>
     </div>
   )

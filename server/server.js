@@ -108,6 +108,11 @@ app.post("/api/signup", async (req, res) => {
           [email, hash, refreshToken]
         );
 
+        await db.query(
+          "INSERT INTO shop (user_id, bronze_medal, silver_medal, gold_medal, diamond_medal) VALUES ($1, $2, $3, $4, $5)",
+          [user.rows[0].id, false, false, false, false]
+        );
+
         user = user.rows[0];
         const userWithToken = { email: user.email, accessToken, refreshToken };
         res.json(userWithToken);
@@ -138,6 +143,7 @@ app.post("/api/login", async (req, res) => {
           email: user.email,
           accessToken,
           refreshToken: user.refresh_token,
+          coins: user.coins,
         };
         res.status(200).json(userWithToken);
       } else {
@@ -402,9 +408,10 @@ app.post("/api/gethabit", verify, async (req, res) => {
           return;
         } else {
           if (habitLastDoneString !== currentDate) {
-            await db.query("UPDATE habits SET streak=0 WHERE habit_name=$1", [
-              habit.habitName,
-            ]);
+            await db.query(
+              "UPDATE habits SET streak=0 WHERE habit_name=$1 AND user_id=$2",
+              [habit.habit_name, user_id]
+            );
             habit.streak = 0;
           }
         }
@@ -445,6 +452,52 @@ app.post("/api/getcoins", async (req, res) => {
       email,
     ]);
     res.status(200).json({ coins: coins.rows[0].coins });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.post("/api/updateshop", async (req, res) => {
+  try {
+    const { email, shopItem } = req.body;
+
+    let user_id = await db.query("SELECT id FROM users WHERE email=$1", [
+      email,
+    ]);
+    user_id = user_id.rows[0].id;
+
+    if (shopItem === "Bronze Badge") {
+      await db.query("UPDATE shop SET bronze_medal=true WHERE user_id=$1", [
+        user_id,
+      ]);
+      await db.query("UPDATE users SET coins = coins - 20 WHERE id=$1", [
+        user_id,
+      ]);
+    } else if (shopItem === "Silver Badge") {
+      await db.query("UPDATE shop SET silver_medal=true WHERE user_id=$1", [
+        user_id,
+      ]);
+      await db.query("UPDATE users SET coins = coins - 75 WHERE id=$1", [
+        user_id,
+      ]);
+    } else if (shopItem === "Gold Badge") {
+      await db.query("UPDATE shop SET gold_medal=true WHERE user_id=$1", [
+        user_id,
+      ]);
+      await db.query("UPDATE users SET coins = coins - 200 WHERE id=$1", [
+        user_id,
+      ]);
+    } else if (shopItem === "Diamond Badge") {
+      await db.query("UPDATE shop SET diamond_medal=true WHERE user_id=$1", [
+        user_id,
+      ]);
+      await db.query("UPDATE users SET coins = coins - 1000 WHERE id=$1", [
+        user_id,
+      ]);
+    }
+
+    res.status(200).json({ message: "Successful" });
   } catch (err) {
     console.error(err);
     res.status(400).json({ error: err.message });

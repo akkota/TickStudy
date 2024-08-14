@@ -12,6 +12,7 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [error, setError] = useState(null);
     const [alert, setAlert] = useState(null);
+    const [coins, setCoins] = useState(null);
 
     const loginUser = async (userInfo) => {
         const email = userInfo.email;
@@ -30,6 +31,7 @@ export const AuthProvider = ({ children }) => {
             
             if (response.ok) {
                 setUser({ email: data.email, accessToken: data.accessToken, refreshToken: data.refreshToken });
+                setCoins(data.coins);
                 setError(null);
                 navigate('/dashboard');
             } else {
@@ -381,8 +383,34 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    async function handleShopBuy(shopItem, itemCost) {
+        setCoins(coins - itemCost);
+        try {
+            const response = await axiosJWT.post("http://localhost:5001/api/updateshop",
+                {email: user.email, shopItem},
+                {
+                    headers: {
+                        authorization: "Bearer " + user.accessToken
+                    },
+                    withCredentials: true,
+                }
+            )
+
+            if (response.data.error) {
+                window.alert("Could not buy item");
+                return;
+            }
+
+
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
     let contextData = {
         user,
+        coins,
+        setCoins,
         loginUser,
         saveTime,
         getStudyTime,
@@ -398,6 +426,7 @@ export const AuthProvider = ({ children }) => {
         updateStreakHabit,
         getHabit,
         getCoins,
+        handleShopBuy,
         error,
     };
 
