@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Shopitem from './components/utils/Shopitem'
 import Sidebar from './components/Sidebar'
 import Coin from './components/Coin'
@@ -9,30 +9,46 @@ import { useAuth } from './components/utils/AuthContext';
 
 const Shop = () => {
 
-  const { alert } = useAuth();
+  const { alert, getShopBought } = useAuth();
+  const [shopStatus, setShopStatus] = useState();
+  const [shopItems, setShopItems] = useState([]);
 
-  const shopItems = [
-    {
-      name: "Bronze Badge",
-      src: "../bronzebadge.png" ,
-      credits: 20,
-    },
-    {
-      name: "Silver Badge",
-      src: "../silverbadge.png",
-      credits: 75,
-    },
-    {
-      name: "Gold Badge",
-      src: "../goldbadge.png",
-      credits: 200,
-    },
-    {
-      name: "Diamond Badge",
-      src: "../diamondbadge.png",
-      credits: 1000,
-    }
-  ]
+  useEffect(() => {
+
+    const fetchShopStatus = async () => {
+      const shopStatus = await getShopBought();
+      setShopItems([
+        {
+          name: "Bronze Badge",
+          src: "../bronzebadge.png" ,
+          credits: 20,
+          hasMedal: shopStatus.bronze_medal
+        },
+        {
+          name: "Silver Badge",
+          src: "../silverbadge.png",
+          credits: 75,
+          hasMedal: shopStatus.silver_medal
+        },
+        {
+          name: "Gold Badge",
+          src: "../goldbadge.png",
+          credits: 200,
+          hasMedal: shopStatus.gold_medal
+        },
+        {
+          name: "Diamond Badge",
+          src: "../diamondbadge.png",
+          credits: 1000,
+          hasMedal: shopStatus.diamond_medal
+        }
+      ])
+      setShopStatus(shopStatus);
+    };
+  
+    fetchShopStatus();
+
+  }, []);
 
   return (
     <div className='h-screen ml-24'>
@@ -61,7 +77,7 @@ const Shop = () => {
                 <Shopitem 
                   name={item.name}
                   src={item.src}
-                  credits={item.credits} />
+                  credits={item.hasMedal ? "Bought" : item.credits} />
               )
             })
           }

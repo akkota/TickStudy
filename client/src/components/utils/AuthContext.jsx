@@ -407,6 +407,29 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    async function getShopBought() {
+        try {
+            const response = await axiosJWT.post("http://localhost:5001/api/getshop", 
+                {email: user.email},
+                {
+                    headers: {
+                        authorization: "Bearer " + user.accessToken
+                    },
+                    withCredentials: true,
+                }
+            )
+
+            if (response.data.error) {
+                window.alert("Issue fetching item bought");
+                return;
+            }
+
+            return response.data.boughtItems;
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
     let contextData = {
         user,
         coins,
@@ -417,6 +440,7 @@ export const AuthProvider = ({ children }) => {
         getTasks,
         addTask,
         removeTask,
+        getShopBought,
         alert,
         getStreak,
         getStudyTimeStat,

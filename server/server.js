@@ -504,6 +504,26 @@ app.post("/api/updateshop", async (req, res) => {
   }
 });
 
+app.post("/api/getshop", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    let user_id = await db.query("SELECT id FROM users WHERE email=$1", [
+      email,
+    ]);
+    user_id = user_id.rows[0].id;
+
+    let boughtItems = await db.query("SELECT * FROM shop WHERE user_id=$1", [
+      user_id,
+    ]);
+
+    res.status(200).json({ boughtItems: boughtItems.rows[0] });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ error: err.message });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server is running on ${port}`);
 });
