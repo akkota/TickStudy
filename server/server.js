@@ -139,8 +139,13 @@ app.post("/api/login", async (req, res) => {
 
       if (valid) {
         const accessToken = generateAccessToken({ email: user.email });
+        let user_id = await db.query("SELECT id FROM users WHERE email=$1", [
+          email,
+        ]);
+        user_id = user_id.rows[0].id;
         const userWithToken = {
           email: user.email,
+          user_id,
           accessToken,
           refreshToken: user.refresh_token,
           coins: user.coins,
@@ -518,6 +523,28 @@ app.post("/api/getshop", async (req, res) => {
     ]);
 
     res.status(200).json({ boughtItems: boughtItems.rows[0] });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.post("/api/getleaderboard", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    let user_id = await db.query("SELECT id FROM users WHERE email=$1", [
+      email,
+    ]);
+    user_id = user_id.rows[0].id;
+
+    const result = await db.query(
+      "SELECT user_id, SUM(study_time) AS total_study_time FROM studytime GROUP BY user_id ORDER BY total_study_time DESC LIMIT 200"
+    );
+
+    res.status(200).json({
+      result: result.rows,
+    });
   } catch (err) {
     console.error(err);
     res.status(400).json({ error: err.message });

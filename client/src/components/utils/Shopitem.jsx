@@ -20,7 +20,7 @@ const Shopitem = (props) => {
   }
 
   return (
-    (<div className='flex flex-col items-center bg-blue-950 rounded-xl shadow-xl p-6 m-6'>
+    (<div key={props.key} className='flex flex-col items-center bg-blue-950 rounded-xl shadow-xl p-6 m-6'>
         <img className="w-[250px] h-[250px]" src={props.src} />
         <p className='font-nunito text-2xl mb-6'>{props.name}</p>
         {credits === "Bought" ? (<p className="text-xl text-red-600 font-nunito">Bought</p>) : (<Button onClick={handleButton} content={"Buy for " + props.credits + " credits"} />)}

@@ -6,6 +6,7 @@ import { VscCheck } from "react-icons/vsc";
 import { Navigate, useNavigate } from 'react-router-dom';
 import { BiRun } from "react-icons/bi";
 import { FaShoppingCart } from "react-icons/fa";
+import { FcBarChart } from "react-icons/fc";
 
 const Sidebar = (props) => {
 
@@ -15,6 +16,8 @@ const Sidebar = (props) => {
   const [tasks, setTasks] = useState('sidebar-icon');
   const [habits, setHabits] = useState('sidebar-icon');
   const [shop, setShop] = useState('sidebar-icon');
+  const [leaderboard, setLeaderboard] = useState('sidebar-icon');
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,36 +26,41 @@ const Sidebar = (props) => {
       setStatistics('sidebar-icon sidebar-active')
       setPomodoro('sidebar-icon');
       setTasks('sidebar-icon');
-      setHabits('sidebar-icon')
-      setShop('sidebar-icon')
+      setHabits('sidebar-icon');
+      setShop('sidebar-icon');
+      setLeaderboard('sidebar-icon');
     } else if (props.from === "dashboard") {
       setDashboard('sidebar-icon sidebar-active');
       setStatistics('sidebar-icon');
       setPomodoro('sidebar-icon');
       setTasks('sidebar-icon');
-      setHabits('sidebar-icon')
-      setShop('sidebar-icon')
+      setHabits('sidebar-icon');
+      setShop('sidebar-icon');
+      setLeaderboard('sidebar-icon');
     } else if (props.from === "pomodoro") {
       setStatistics('sidebar-icon');
       setDashboard('sidebar-icon')
       setPomodoro('sidebar-icon sidebar-active');
       setTasks('sidebar-icon');
-      setHabits('sidebar-icon')
-      setShop('sidebar-icon')
+      setHabits('sidebar-icon');
+      setShop('sidebar-icon');
+      setLeaderboard('sidebar-icon');
     } else if (props.from === "tasklist") {
       setTasks('sidebar-icon sidebar-active');
       setStatistics('sidebar-icon');
       setDashboard('sidebar-icon')
       setPomodoro('sidebar-icon')
-      setHabits('sidebar-icon')
-      setShop('sidebar-icon')
+      setHabits('sidebar-icon');
+      setShop('sidebar-icon');
+      setLeaderboard('sidebar-icon');
     } else if (props.from === "habits") {
       setTasks('sidebar-icon');
       setStatistics('sidebar-icon');
       setDashboard('sidebar-icon')
-      setPomodoro('sidebar-icon') 
-      setHabits('sidebar-icon sidebar-active')
-      setShop('sidebar-icon')
+      setPomodoro('sidebar-icon');
+      setHabits('sidebar-icon sidebar-active');
+      setShop('sidebar-icon');
+      setLeaderboard('sidebar-icon');
     } else if (props.from === "shop") {
       setTasks('sidebar-icon');
       setStatistics('sidebar-icon');
@@ -60,6 +68,15 @@ const Sidebar = (props) => {
       setPomodoro('sidebar-icon')
       setHabits('sidebar-icon') ;
       setShop('sidebar-icon sidebar-active');
+      setLeaderboard('sidebar-icon');
+    } else if (props.from === "leaderboard") {
+      setTasks('sidebar-icon');
+      setStatistics('sidebar-icon');
+      setDashboard('sidebar-icon');
+      setPomodoro('sidebar-icon');
+      setHabits('sidebar-icon');
+      setShop('sidebar-icon'); 
+      setLeaderboard('sidebar-icon sidebar-active');
     }
   }, [props.from])
   
@@ -88,6 +105,10 @@ const Sidebar = (props) => {
     navigate('/shop')
   }
 
+  function handleLeaderboard() {
+    navigate('/leaderboard')
+  }
+
   return (
     <div className="fixed top-0 left-0 h-screen w-16 m-0 flex flex-col bg-slate-600 text-white shadow-lg">
         <div className="relative group">
@@ -113,6 +134,10 @@ const Sidebar = (props) => {
         <div className='relative group'>
             <FaShoppingCart onClick={handleShop} className={shop} />
             <span className='sidebar-tooltip group-hover:scale-100'>Shop</span> 
+        </div>
+        <div className='relative group'>
+            <FcBarChart onClick={handleLeaderboard} className={leaderboard} />
+            <span className='sidebar-tooltip group-hover:scale-100'>Leaderboard</span> 
         </div>
     </div>
   )

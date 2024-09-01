@@ -22,25 +22,29 @@ const Shop = () => {
           name: "Bronze Badge",
           src: "../bronzebadge.png" ,
           credits: 20,
-          hasMedal: shopStatus.bronze_medal
+          hasMedal: shopStatus.bronze_medal,
+          key: 1,
         },
         {
           name: "Silver Badge",
           src: "../silverbadge.png",
           credits: 75,
-          hasMedal: shopStatus.silver_medal
+          hasMedal: shopStatus.silver_medal,
+          key: 2,
         },
         {
           name: "Gold Badge",
           src: "../goldbadge.png",
           credits: 200,
-          hasMedal: shopStatus.gold_medal
+          hasMedal: shopStatus.gold_medal,
+          key: 3,
         },
         {
           name: "Diamond Badge",
           src: "../diamondbadge.png",
           credits: 1000,
-          hasMedal: shopStatus.diamond_medal
+          hasMedal: shopStatus.diamond_medal,
+          key: 4,
         }
       ])
       setShopStatus(shopStatus);
@@ -75,6 +79,7 @@ const Shop = () => {
             shopItems.map((item) => {
               return (
                 <Shopitem 
+                  key={item.key}
                   name={item.name}
                   src={item.src}
                   credits={item.hasMedal ? "Bought" : item.credits} />

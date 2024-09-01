@@ -10,6 +10,7 @@ import Pomodoro from './Pomodoro';
 import Tasklist from './Tasklist'
 import Habits from './Habits';
 import Shop from './Shop';
+import Leaderboard from './Leaderboard';
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
               <Route path="/tasklist" element={<Tasklist />}></Route>
               <Route path="/habits" element={<Habits />}></Route>
               <Route path="/shop" element={<Shop />}></Route>
+              <Route path="/leaderboard" element={<Leaderboard />}></Route>
             </Route>
           </Routes>
         </AuthProvider>

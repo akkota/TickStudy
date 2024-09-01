@@ -12,7 +12,7 @@ const Habits = () => {
     const [habitTitle, setHabitTitle] = useState("");
     const [habits, setHabits] = useState([]);
     const { submitHabit, getHabit } = useAuth();
-//TODO: Make sure streak works properly. Update last date upon check
+
     useEffect(() => {
         const fetchHabits = async () => {
             try {

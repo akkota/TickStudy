@@ -8,7 +8,6 @@ import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 import { useAuth } from './components/utils/AuthContext';
 import Coin from './components/Coin';
 //TODO: Alerts show up twice when running pomodoro and remainingtime. 
-//TODO: Make pomodoro time add to study time in database
 const Pomodoro = () => {
 
   const { saveTime, alert, setAlert } = useAuth();

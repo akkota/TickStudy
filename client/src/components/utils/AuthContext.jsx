@@ -13,6 +13,7 @@ export const AuthProvider = ({ children }) => {
     const [error, setError] = useState(null);
     const [alert, setAlert] = useState(null);
     const [coins, setCoins] = useState(null);
+    const [userID, setUserID] = useState(null);
 
     const loginUser = async (userInfo) => {
         const email = userInfo.email;
@@ -31,6 +32,7 @@ export const AuthProvider = ({ children }) => {
             
             if (response.ok) {
                 setUser({ email: data.email, accessToken: data.accessToken, refreshToken: data.refreshToken });
+                setUserID(data.user_id);
                 setCoins(data.coins);
                 setError(null);
                 navigate('/dashboard');
@@ -430,8 +432,34 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    async function getLeaderboardData() {
+        try {
+
+            const response = await axiosJWT.post("http://localhost:5001/api/getleaderboard", 
+                {email: user.email},
+                {
+                    headers: {
+                        authorization: "Bearer " + user.accessToken
+                    },
+                    withCredentials: true,
+                }
+            )
+            
+            if (response.data.error) {
+                window.alert("Issue fetching leaderboard data");
+                return;
+            }
+
+            return response.data.result;
+
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
     let contextData = {
         user,
+        userID,
         coins,
         setCoins,
         loginUser,
@@ -451,6 +479,7 @@ export const AuthProvider = ({ children }) => {
         getHabit,
         getCoins,
         handleShopBuy,
+        getLeaderboardData,
         error,
     };
 
